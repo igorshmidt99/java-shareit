@@ -25,7 +25,7 @@ public class ItemController {
     }
 
     @PatchMapping("/{itemId}")
-    public ItemDto patchItem(@Valid @RequestBody ItemDto itemDto,
+    public ItemDto patchItem(@RequestBody ItemDto itemDto,
                              @Size(min = 1) @PathVariable Long itemId,
                              @Size(min = 1) @RequestHeader("X-Sharer-User-Id") Long userId) {
         return service.updateItem(itemDto, itemId, userId);

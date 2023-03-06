@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 @Repository
 public class ItemDaoImpl implements ItemDao {
-    private static final HashMap<Long, Item> items = new HashMap<>(1000);
+    private static final HashMap<Long, Item> items = new HashMap<>(10000);
 
     @Override
     public Item addItem(Item item) {
@@ -22,27 +22,26 @@ public class ItemDaoImpl implements ItemDao {
     public Item updateItem(Item item) {
         long itemId = item.getItemId();
 
-        checkKey(itemId);
+        checkAvailability(itemId);
         items.put(itemId, item);
         return item;
     }
 
     @Override
     public void deleteItem(long itemId) {
-        checkKey(itemId);
+        checkAvailability(itemId);
         items.remove(itemId);
     }
 
     @Override
     public Item getItemById(long itemId) {
-        checkKey(itemId);
+        checkAvailability(itemId);
         return items.get(itemId);
     }
 
     @Override
     public List<Item> getAllUserItems(long userId) {
-        return items.values()
-                .stream()
+        return items.values().stream()
                 .filter(item -> item.getOwner() == userId)
                 .collect(Collectors.toList());
     }
@@ -51,11 +50,23 @@ public class ItemDaoImpl implements ItemDao {
     public List<Item> searchItemsByText(String text) {
         return items.values().stream()
                 .filter(Item::getIsAvailable)
-                .filter(item -> item.getName().contains(text) || item.getDescription().contains(text))
+                .filter(item -> matchRegions(item, text.toLowerCase()))
                 .collect(Collectors.toList());
     }
 
-    private void checkKey(long itemId) {
+    private boolean matchRegions(Item item, String text) {
+        if (text.isBlank()) return false;
+        String description = item.getDescription().toLowerCase();
+        String name = item.getName().toLowerCase();
+        int startNameIndex = name.indexOf(text);
+        int startDescriptionIndex = description.indexOf(text);
+        int textLength = text.length();
+
+        return description.regionMatches(true, startDescriptionIndex, text, 0, textLength)
+                || name.regionMatches(true, startNameIndex, text, 0, textLength);
+    }
+
+    private void checkAvailability(long itemId) {
         if (!items.containsKey(itemId))
             throw new ItemNotFoundException(String.format("Oбъекта c ID# %d не существует.", itemId));
     }

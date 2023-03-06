@@ -15,31 +15,29 @@ public class ItemMapper {
     public Item mapToItem(ItemDto itemDto, long userId) {
         Item item = Item.builder()
                 .description(itemDto.getDescription())
-                .isAvailable(itemDto.getIsAvailable())
+                .isAvailable(itemDto.getAvailable())
                 .name(itemDto.getName())
                 .owner(userId)
                 .build();
-        long newItemId = createId(item.getItemId());
-        item.setItemId(newItemId);
+        item.setItemId(createId(item.getItemId()));
         return item;
     }
 
-    public Item mapToItem(ItemDto itemDto, long userId, long itemId) {
-        createId(itemId);
-        return Item.builder()
-                .description(itemDto.getDescription())
-                .isAvailable(itemDto.getIsAvailable())
-                .name(itemDto.getName())
-                .owner(userId)
-                .itemId(itemId)
-                .build();
+    public Item mapToItem(ItemDto itemDto, Item item) {
+        String newDescription = itemDto.getDescription();
+        Boolean newAvailable = itemDto.getAvailable();
+        String newName = itemDto.getName();
+        if (newName != null) item.setName(newName);
+        if (newAvailable != null) item.setIsAvailable(newAvailable);
+        if (newDescription != null) item.setDescription(newDescription);
+        return item;
     }
 
     public ItemDto mapToDto(Item item) {
         return ItemDto.builder()
                 .id(item.getItemId())
                 .description(item.getDescription())
-                .isAvailable(item.getIsAvailable())
+                .available(item.getIsAvailable())
                 .name(item.getName())
                 .build();
     }
@@ -50,8 +48,8 @@ public class ItemMapper {
                 .collect(Collectors.toList());
     }
 
-    private long createId(long itemId) {
-        if (itemId <= 0) return ++ITEM_ID;
+    private long createId(Long itemId) {
+        if (itemId == null || itemId <= 0) return ++ITEM_ID;
         if (itemId > ITEM_ID) ITEM_ID = itemId;
         return itemId;
     }
