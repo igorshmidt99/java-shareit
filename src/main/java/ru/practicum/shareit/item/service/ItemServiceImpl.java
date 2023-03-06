@@ -53,5 +53,4 @@ public class ItemServiceImpl implements ItemService {
         List<Item> foundItems = storage.searchItemsByText(text);
         return mapper.mapToDtoList(foundItems);
     }
-
 }

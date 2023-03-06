@@ -1,6 +1,7 @@
 package ru.practicum.shareit.item.dao;
 
 import org.springframework.stereotype.Repository;
+import ru.practicum.shareit.item.exception.ItemNotFoundException;
 import ru.practicum.shareit.item.model.Item;
 
 import java.util.HashMap;
@@ -50,12 +51,12 @@ public class ItemDaoImpl implements ItemDao {
     public List<Item> searchItemsByText(String text) {
         return items.values().stream()
                 .filter(Item::getIsAvailable)
-                .filter(item -> item.getName().contains(text))
-                .filter(item -> item.getDescription().contains(text))
+                .filter(item -> item.getName().contains(text) || item.getDescription().contains(text))
                 .collect(Collectors.toList());
     }
 
     private void checkKey(long itemId) {
-        if (!items.containsKey(itemId)) throw new IllegalArgumentException("Такого объекта не существует.");
+        if (!items.containsKey(itemId))
+            throw new ItemNotFoundException(String.format("Oбъекта c ID# %d не существует.", itemId));
     }
 }
