@@ -13,13 +13,14 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
+
     private final UserDao storage;
+
     private final UserMapper mapper;
 
     @Override
     public UserDto add(UserDto userDto) {
         checkEmailOfNewUser(userDto);
-
         User user = mapper.mapToUser(userDto);
         storage.add(user);
         userDto = mapper.mapToDto(user);
@@ -44,34 +45,43 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto getById(long userId) {
         User user = storage.getById(userId);
+
         return mapper.mapToDto(user);
     }
 
     @Override
     public List<UserDto> getAll() {
         List<User> users = storage.getAll();
+
         return mapper.getDtos(users);
     }
 
     private void checkEmailWhileUpdate(UserDto userDto, long userId) {
         List<User> users = storage.getAll();
+
         if (users.size() > 0)
             users.stream()
                 .filter(user -> user.getEmail().equals(userDto.getEmail()) && user.getId() != userId)
                 .findAny()
                 .ifPresent(user -> {
-                    throw new UserAlreadyExistException(String.format("Пользователь с %s существует.", user.getEmail()));
+                    throw new UserAlreadyExistException(
+                            String.format("Пользователь с %s существует.", user.getEmail())
+                    );
                 });
     }
 
     private void checkEmailOfNewUser(UserDto userDto) {
         List<User> users = storage.getAll();
+
         if (users.size() > 0)
             users.stream()
                     .filter(user -> user.getEmail().equals(userDto.getEmail()))
                     .findAny()
                     .ifPresent(user -> {
-                        throw new UserAlreadyExistException(String.format("Пользователь с %s существует.", user.getEmail()));
+                        throw new UserAlreadyExistException(
+                                String.format("Пользователь с %s существует.", user.getEmail())
+                        );
                     });
     }
+
 }

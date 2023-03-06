@@ -16,8 +16,11 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ItemServiceImpl implements ItemService {
+
     private final ItemDao itemStorage;
+
     private final UserDao userStorage;
+
     private final ItemMapper mapper;
 
     @Override
@@ -89,4 +92,5 @@ public class ItemServiceImpl implements ItemService {
                     );
                 });
     }
+
 }

@@ -10,6 +10,7 @@ import java.util.Map;
 
 @Repository
 public class UserDaoImpl implements UserDao {
+
     private final Map<Long, User> users = new HashMap<>(1000);
 
     @Override
@@ -46,4 +47,5 @@ public class UserDaoImpl implements UserDao {
         if (!users.containsKey(userId))
             throw new UserNotFoundException(String.format("Пользовватель с ID# %d не найден", userId));
     }
+
 }

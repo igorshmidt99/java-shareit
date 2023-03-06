@@ -17,7 +17,9 @@ import java.util.List;
 @RequestMapping("/items")
 @RequiredArgsConstructor
 public class ItemController {
+
     private final ItemService service;
+
     @PostMapping
     public ItemDto postItem(@Valid @RequestBody ItemDto itemDto,
                             @Size(min = 1) @RequestHeader("X-Sharer-User-Id") Long userId) {
@@ -50,4 +52,5 @@ public class ItemController {
     public List<ItemDto> getItemsByText(@NotBlank @RequestParam("text") String text) {
         return service.searchItemsByText(text);
     }
+
 }
