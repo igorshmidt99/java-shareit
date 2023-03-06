@@ -6,7 +6,6 @@ import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.service.UserService;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
 
@@ -17,6 +16,7 @@ import java.util.List;
 @RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserController {
+
     private final UserService service;
 
     @GetMapping("/{userId}")
@@ -43,4 +43,5 @@ public class UserController {
     public void deleteUser(@Size(min = 1) @PathVariable Long userId) {
         service.delete(userId);
     }
+
 }
