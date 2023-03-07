@@ -12,7 +12,8 @@ public final class ItemMapper {
 
     private static long ITEM_ID;
 
-    private ItemMapper() { }
+    private ItemMapper() {
+    }
 
     public static Item mapToItem(ItemDto itemDto, User user) {
         Item item = Item.builder()

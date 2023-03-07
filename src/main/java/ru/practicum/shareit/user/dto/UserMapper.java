@@ -10,7 +10,8 @@ import java.util.stream.Collectors;
 public final class UserMapper {
     private static long USER_ID;
 
-    private UserMapper() { }
+    private UserMapper() {
+    }
 
     public static User mapToUser(UserDto userDto) {
         User user = User.builder()
