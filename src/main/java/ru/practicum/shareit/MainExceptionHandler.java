@@ -49,7 +49,7 @@ public class MainExceptionHandler {
 
     @Getter
     @AllArgsConstructor
-    protected class ErrorResponse {
+    private class ErrorResponse {
         private String name;
         private String description;
     }

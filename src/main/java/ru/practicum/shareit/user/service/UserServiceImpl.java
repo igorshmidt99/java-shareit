@@ -16,14 +16,12 @@ public class UserServiceImpl implements UserService {
 
     private final UserDao storage;
 
-    private final UserMapper mapper;
-
     @Override
     public UserDto add(UserDto userDto) {
         checkEmailOfNewUser(userDto);
-        User user = mapper.mapToUser(userDto);
+        User user = UserMapper.mapToUser(userDto);
         storage.add(user);
-        userDto = mapper.mapToDto(user);
+        userDto = UserMapper.mapToDto(user);
         return userDto;
     }
 
@@ -31,9 +29,9 @@ public class UserServiceImpl implements UserService {
     public UserDto update(UserDto userDto, long userId) {
         if (userDto.getEmail() != null) checkEmailWhileUpdate(userDto, userId);
         User thisUser = storage.getById(userId);
-        User updatedUser = mapper.mapToUpdatedUser(userDto, thisUser);
+        User updatedUser = UserMapper.mapToUpdatedUser(userDto, thisUser);
         storage.update(updatedUser);
-        userDto = mapper.mapToDto(updatedUser);
+        userDto = UserMapper.mapToDto(updatedUser);
         return userDto;
     }
 
@@ -46,14 +44,14 @@ public class UserServiceImpl implements UserService {
     public UserDto getById(long userId) {
         User user = storage.getById(userId);
 
-        return mapper.mapToDto(user);
+        return UserMapper.mapToDto(user);
     }
 
     @Override
     public List<UserDto> getAll() {
         List<User> users = storage.getAll();
 
-        return mapper.getDtos(users);
+        return UserMapper.getDtos(users);
     }
 
     private void checkEmailWhileUpdate(UserDto userDto, long userId) {

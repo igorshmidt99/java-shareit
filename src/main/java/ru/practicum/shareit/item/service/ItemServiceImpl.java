@@ -21,12 +21,11 @@ public class ItemServiceImpl implements ItemService {
 
     private final UserDao userStorage;
 
-    private final ItemMapper mapper;
-
     @Override
     public ItemDto addItem(ItemDto itemDto, long userId) {
         userCheckExistence(userId);
-        Item item = mapper.mapToItem(itemDto, userId);
+        User user = userStorage.getById(userId);
+        Item item = ItemMapper.mapToItem(itemDto, user);
         itemStorage.addItem(item);
         itemDto.setId(item.getItemId());
         return itemDto;
@@ -38,9 +37,9 @@ public class ItemServiceImpl implements ItemService {
         userCheckExistence(userId);
         itemCheckIntersectionWithUser(itemId, userId);
         Item item = itemStorage.getItemById(itemId);
-        item = mapper.mapToItem(itemDto, item);
+        item = ItemMapper.mapToItem(itemDto, item);
         itemStorage.updateItem(item);
-        itemDto = mapper.mapToDto(item);
+        itemDto = ItemMapper.mapToDto(item);
         return itemDto;
     }
 
@@ -53,20 +52,20 @@ public class ItemServiceImpl implements ItemService {
     public ItemDto getItemById(long itemId) {
         itemCheckExistence(itemId);
         Item item = itemStorage.getItemById(itemId);
-        return mapper.mapToDto(item);
+        return ItemMapper.mapToDto(item);
     }
 
     @Override
     public List<ItemDto> getAllUserItems(long userId) {
         userCheckExistence(userId);
         List<Item> userItems = itemStorage.getAllUserItems(userId);
-        return mapper.mapToDtoList(userItems);
+        return ItemMapper.mapToDtoList(userItems);
     }
 
     @Override
     public List<ItemDto> searchItemsByText(String text) {
         List<Item> foundItems = itemStorage.searchItemsByText(text);
-        return mapper.mapToDtoList(foundItems);
+        return ItemMapper.mapToDtoList(foundItems);
     }
 
     private void userCheckExistence(long userId) {

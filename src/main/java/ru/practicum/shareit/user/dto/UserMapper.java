@@ -1,18 +1,18 @@
 package ru.practicum.shareit.user.dto;
 
 import lombok.Getter;
-import org.springframework.stereotype.Component;
 import ru.practicum.shareit.user.model.User;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Component
 @Getter
-public class UserMapper {
+public final class UserMapper {
     private static long USER_ID;
 
-    public User mapToUser(UserDto userDto) {
+    private UserMapper() { }
+
+    public static User mapToUser(UserDto userDto) {
         User user = User.builder()
                 .name(userDto.getName())
                 .id(userDto.getId())
@@ -23,7 +23,7 @@ public class UserMapper {
         return user;
     }
 
-    public User mapToUpdatedUser(UserDto userDto, User user) {
+    public static User mapToUpdatedUser(UserDto userDto, User user) {
         String dtoEmail = userDto.getEmail();
         String dtoName = userDto.getName();
         if (dtoEmail != null) user.setEmail(dtoEmail);
@@ -31,7 +31,7 @@ public class UserMapper {
         return user;
     }
 
-    public UserDto mapToDto(User user) {
+    public static UserDto mapToDto(User user) {
         return UserDto.builder()
                 .id(user.getId())
                 .email(user.getEmail())
@@ -39,13 +39,13 @@ public class UserMapper {
                 .build();
     }
 
-    public List<UserDto> getDtos(List<User> users) {
+    public static List<UserDto> getDtos(List<User> users) {
         return users.stream()
-                .map(this::mapToDto)
+                .map(UserMapper::mapToDto)
                 .collect(Collectors.toList());
     }
 
-    private long createId(Long userId) {
+    private static long createId(Long userId) {
         if (userId == null || userId <= 0) return ++USER_ID;
         if (userId > USER_ID) USER_ID = userId;
         return userId;

@@ -22,14 +22,14 @@ public class ItemController {
 
     @PostMapping
     public ItemDto postItem(@Valid @RequestBody ItemDto itemDto,
-                            @Size(min = 1) @RequestHeader("X-Sharer-User-Id") Long userId) {
+                            @Size(min = 1) @RequestHeader("X-Sharer-User-Id") final Long userId) {
         return service.addItem(itemDto, userId);
     }
 
     @PatchMapping("/{itemId}")
     public ItemDto patchItem(@RequestBody ItemDto itemDto,
                              @Size(min = 1) @PathVariable Long itemId,
-                             @Size(min = 1) @RequestHeader("X-Sharer-User-Id") Long userId) {
+                             @Size(min = 1) @RequestHeader("X-Sharer-User-Id") final Long userId) {
         return service.updateItem(itemDto, itemId, userId);
     }
 
@@ -44,7 +44,7 @@ public class ItemController {
     }
 
     @GetMapping
-    public List<ItemDto> getUserItems(@Size(min = 1) @RequestHeader("X-Sharer-User-Id") Long userId) {
+    public List<ItemDto> getUserItems(@Size(min = 1) @RequestHeader("X-Sharer-User-Id") final Long userId) {
         return service.getAllUserItems(userId);
     }
 

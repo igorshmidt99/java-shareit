@@ -11,7 +11,7 @@ import java.util.Map;
 @Repository
 public class UserDaoImpl implements UserDao {
 
-    private final Map<Long, User> users = new HashMap<>(1000);
+    private final Map<Long, User> users = new HashMap<>(997);
 
     @Override
     public User add(User user) {

@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 @Repository
 public class ItemDaoImpl implements ItemDao {
-    private static final HashMap<Long, Item> items = new HashMap<>(10000);
+    private static final HashMap<Long, Item> items = new HashMap<>(10007);
 
     @Override
     public Item addItem(Item item) {
@@ -42,7 +42,7 @@ public class ItemDaoImpl implements ItemDao {
     @Override
     public List<Item> getAllUserItems(long userId) {
         return items.values().stream()
-                .filter(item -> item.getOwner() == userId)
+                .filter(item -> item.getOwner().getId() == userId)
                 .collect(Collectors.toList());
     }
 
@@ -58,12 +58,12 @@ public class ItemDaoImpl implements ItemDao {
         if (text.isBlank()) return false;
         String description = item.getDescription().toLowerCase();
         String name = item.getName().toLowerCase();
-        int startNameIndex = name.indexOf(text);
-        int startDescriptionIndex = description.indexOf(text);
+        int nameStartIndex = name.indexOf(text);
+        int descriptionStartIndex = description.indexOf(text);
         int textLength = text.length();
 
-        return description.regionMatches(true, startDescriptionIndex, text, 0, textLength)
-                || name.regionMatches(true, startNameIndex, text, 0, textLength);
+        return description.regionMatches(true, descriptionStartIndex, text, 0, textLength)
+                || name.regionMatches(true, nameStartIndex, text, 0, textLength);
     }
 
     private void checkAvailability(long itemId) {
